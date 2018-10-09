@@ -7,7 +7,7 @@ testShapeFunctions();
 testAffineMapping();
 %% Shape functions
 function testShapeFunctions()
-    % First test for nodal basis:
+    % Test for nodal basis:
     v = {[0,0],[1,0],[0,1]}; %vertices
     for i = 0:2
         for j = 0:2
