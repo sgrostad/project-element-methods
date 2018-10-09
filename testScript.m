@@ -1,8 +1,11 @@
 %% Test script
-%% Shape functions
+clear all
+close all
+clc
+%% Tests
 testShapeFunctions();
-
-
+testAffineMapping();
+%% Shape functions
 function testShapeFunctions()
     % First test for nodal basis:
     v = {[0,0],[1,0],[0,1]}; %vertices
@@ -28,4 +31,36 @@ function testShapeFunctions()
         end
     end
     fprintf("The sum of shape functions equal 1 for all x in K! \n");
+end
+
+%% Affine mapping
+
+function testAffineMapping()
+    v0 = [1; 0];
+    v1 = [3; 1];
+    v2 = [3; 2];
+    i = 1;
+    step = 0.01;
+    xMapped = zeros(1,5146);
+    yMapped = zeros(1,5146);
+    for x = 0:step:1
+        for y = 0:step:1-x
+            mapped = getAffineMapping(v0,v1,v2,[x;y],false);
+            xMapped(i) = mapped(1);
+            yMapped(i) = mapped(2);
+            i = i + 1;
+        end
+    end
+    figure
+    plot(xMapped,yMapped,"*b");
+    hold on
+    xHat = zeros(1,5146);
+    yHat = zeros(1,5146);
+    for i = 1:length(xMapped)
+        nonMapped = getAffineMapping(v0,v1,v2,[xMapped(i); yMapped(i)],true);
+        xHat(i) = nonMapped(1);
+        yHat(i) = nonMapped(2);
+    end
+    plot(xHat,yHat,"*r")
+    legend("Mapped to K_0","Reference element")
 end
