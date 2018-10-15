@@ -3,8 +3,10 @@ clear all
 close all
 clc
 %% Tests
-testShapeFunctions();
-testAffineMapping();
+% testShapeFunctions();
+% testAffineMapping();
+% testComputeMesh();
+plotErrorGaussLegendreQuadratures1D()
 %% Shape functions
 function testShapeFunctions()
     % Test for nodal basis:
@@ -63,4 +65,37 @@ function testAffineMapping()
     end
     plot(xHat,yHat,"*r")
     legend("Mapped to K_0","Reference element")
+end
+
+%% Mesh
+
+function testComputeMesh()
+    Kx = 3;
+    Ky = 8;
+    [elements, vertices] = computeMesh(Kx, Ky);
+    figure
+    hold on
+    for i = 1:length(elements)
+        K = vertices(:,elements(:,i));
+        K(:,4) = K(:,1);
+        plot(K(1,:),K(2,:));
+    end
+    for i = 1:length(vertices)
+        plot(vertices(1,i),vertices(2,i),'*r')
+    end
+end
+
+%% Gauss-Legendre Quadratures
+
+function plotErrorGaussLegendreQuadratures1D()
+    f = @(x) exp(x);
+    a = 1;
+    b = 2;
+    analyticSol = f(2) - f(1);
+    error = zeros(1,4);
+    for N = 1:4
+        error(N) = abs(gaussLegendreQuadratures1D(f,a,b,N) - analyticSol);
+    end
+    semilogy(1:4,error,'*')
+    disp(error)
 end
