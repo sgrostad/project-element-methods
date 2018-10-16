@@ -1,9 +1,13 @@
-function xMapped = getAffineMapping(v0, v1, v2, xNonMapped, inverse)
+% maps from reference with inverse as "false", to reference with inverse as
+% "true".
+function [xMapped, jacobian] = getAffineMapping(v0, v1, v2, xNonMapped, inverse)
     if inverse
         jacInverse = getAffineMappingJacobianInverse(v0, v1, v2);
+        jacobian = jacInverse;
         xMapped = jacInverse*(xNonMapped-v0);
     else
         jac = getAffineMappingJacobian(v0,v1,v2);
+        jacobian = jac;
         xMapped = v0 + jac * xNonMapped;
     end
 end

@@ -1,10 +1,11 @@
-function integral = gaussLegendreQuadratures2D(f, v, N) 
-    K = 1; %What is K?
+function integral = gaussLegendreQuadratures2D(f, v0, v1, v2, N) 
+    [~, jacobian] = getAffineMapping(v0, v1, v2, [0;0], false);
+    K = det(jacobian);
     [ksi, omega] = getQuadratures(K, N);
     x = ksi(:,2:3)';
     integral = 0;
     for i = 1:size(x,2)
-       xMapped = getAffineMapping(v(:,1),v(:,2),v(:,3),x(:,i),true);
+       xMapped = getAffineMapping(v0, v1, v2, x(:,i), false);
        integral = integral + f(xMapped(1), xMapped(2)) * omega(i);
     end
 end
