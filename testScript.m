@@ -6,7 +6,8 @@ clc
 % testShapeFunctions();
 % testAffineMapping();
 % testComputeMesh();
-plotErrorGaussLegendreQuadratures1D()
+% plotErrorGaussLegendreQuadratures1D()
+plotErrorGaussLegendreQuadratures2D()
 %% Shape functions
 function testShapeFunctions()
     % Test for nodal basis:
@@ -97,5 +98,20 @@ function plotErrorGaussLegendreQuadratures1D()
         error(N) = abs(gaussLegendreQuadratures1D(f,a,b,N) - analyticSol);
     end
     semilogy(1:4,error,'*')
+    disp(error)
+end
+
+function plotErrorGaussLegendreQuadratures2D()
+    f = @(x,y) log(x + y);
+    v0 = [1; 0];
+    v1 = [3; 1];
+    v2 = [3; 2];
+    analyticSol = 1.16542; 
+    error = zeros(1,4);
+    N = [1, 3, 4, 6];
+    for i = 1:length(N)
+        error(i) = abs(gaussLegendreQuadratures2D(f,[v0, v1, v2],N(i)) - analyticSol);
+    end
+    semilogy(N,error,'*')
     disp(error)
 end

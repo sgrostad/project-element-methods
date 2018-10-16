@@ -1,9 +1,11 @@
-function integral = gaussLegendreQuadratures2D(f, Dx, Dy, N) 
+function integral = gaussLegendreQuadratures2D(f, v, N) 
     K = 1; %What is K?
     [ksi, omega] = getQuadratures(K, N);
+    x = ksi(:,2:3)';
     integral = 0;
-    for i = 1:length(ksi)
-       integral = integral + f(ksi(i))*omega(i);
+    for i = 1:size(x,2)
+       xMapped = getAffineMapping(v(:,1),v(:,2),v(:,3),x(:,i),true);
+       integral = integral + f(xMapped(1), xMapped(2)) * omega(i);
     end
 end
 
@@ -11,7 +13,7 @@ function [ksi, omega] = getQuadratures(K,N)
     switch N
         case 1
             a = 1/3;
-            ksi = [a, a a];
+            ksi = [a, a, a];
             omega = K;
         case 3
             a = 1/2;
