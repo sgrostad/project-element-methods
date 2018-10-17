@@ -1,6 +1,6 @@
 function integral = gaussLegendreQuadratures2D(f, v0, v1, v2, N) 
     [~, jacobian] = getAffineMapping(v0, v1, v2, [0;0], false);
-    K = det(jacobian);
+    K = abs(det(jacobian))/2;
     [ksi, omega] = getQuadratures(K, N);
     x = ksi(:,2:3)';
     integral = 0;
